@@ -92,6 +92,18 @@ namespace DinoCards
             foreach (var dino in dinoCards)
                 dino.Update(ms_curr, ms_old);
 
+            for (int i = dinoCards.Count - 1; i >= 0; i--)
+            {
+                if (discards.Accepting
+                    && discards.Rect.Intersects(dinoCards[i].Rect)
+                    && ms_curr.LeftButton == ButtonState.Released)
+                {
+                    discards.TestCard(dinoCards[i]);
+                    dinoCards.RemoveAt(i);
+                    discards.Accepting = false;
+                }
+            }
+
             ms_old = ms_curr;
             base.Update(gameTime);
         }

@@ -7,14 +7,14 @@ namespace DinoCards
 {
     class DiscardPile
     {
-        private bool _accepting;
+        public bool Accepting { get; set; }
         private int _currentValid;
 
         private List<Texture2D> _possibleTextures;
         private List<SoundEffect> _sfx;
 
         private Vector2 _pos;
-        private Rectangle _rect;
+        public Rectangle Rect { get; private set; }
 
         private float _shuffleTime;
         private float _shuffleTimer;
@@ -25,11 +25,23 @@ namespace DinoCards
             _sfx = sfx;
 
             _pos = position;
-            _rect = new Rectangle(_pos.ToPoint(), (textures[0].Bounds.Size.ToVector2() * 1.2f).ToPoint());
-            _accepting = false;
+            Rect = new Rectangle(_pos.ToPoint(), (textures[0].Bounds.Size.ToVector2() * 1.2f).ToPoint());
+            Accepting = false;
             _currentValid = 0;
 
             _shuffleTimer = _shuffleTime = 6f;
+        }
+
+        public void TestCard(Card cardToTest)
+        {
+            if (Accepting && cardToTest.Value == _currentValid * 2 + 4)
+            {
+                _sfx[2].Play();
+            }
+            else
+            {
+                _sfx[1].Play();
+            }
         }
 
         public void Update(float deltaTime)
@@ -38,21 +50,21 @@ namespace DinoCards
 
             if (_shuffleTimer > 0)
             {
-                if (!_accepting)
+                if (!Accepting)
                     _currentValid = Game1.RNG.Next(_possibleTextures.Count);
             }
             else
             {
                 _shuffleTimer = _shuffleTime;
-                if (!_accepting)
+                if (!Accepting)
                     _sfx[0].Play();
-                _accepting = !_accepting;
+                Accepting = !Accepting;
             }
         }
 
         public void Draw(SpriteBatch sb)
         {
-            sb.Draw(_possibleTextures[_currentValid], _rect, Color.White * 0.5f);
+            sb.Draw(_possibleTextures[_currentValid], Rect, Color.White * 0.5f);
         }
 
     }
