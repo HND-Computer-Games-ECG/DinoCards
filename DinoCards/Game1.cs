@@ -31,6 +31,8 @@ namespace DinoCards
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            _graphics.PreferredBackBufferWidth = 1024;
+            _graphics.PreferredBackBufferHeight = 768;
         }
 
         protected override void Initialize()
@@ -68,7 +70,7 @@ namespace DinoCards
                 Content.Load<SoundEffect>("sfx//confirmation_003")
             };
 
-            discards = new DiscardPile(new Vector2(8, 128), cardFronts, gameFX);
+            discards = new DiscardPile(8, 8, scR.Y - 150, cardFronts, gameFX);
 
             for (var i = 0; i < cardFronts.Count; i++)
             {
@@ -100,7 +102,6 @@ namespace DinoCards
                 {
                     discards.TestCard(dinoCards[i]);
                     dinoCards.RemoveAt(i);
-                    discards.Accepting = false;
                 }
             }
 
